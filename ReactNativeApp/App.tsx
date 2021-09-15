@@ -8,7 +8,10 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import PushNotificationIOS, {
+  PushNotification,
+} from '@react-native-community/push-notification-ios';
 import {
   SafeAreaView,
   ScrollView,
@@ -31,6 +34,22 @@ const Section: React.FC<{
   title: string;
 }> = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
+
+  useEffect(() => {
+    PushNotificationIOS.requestPermissions();
+    PushNotificationIOS.addEventListener(
+      'localNotification',
+      onRemoteNotification,
+    );
+
+    return () => PushNotificationIOS.removeEventListener('localNotification');
+  }, []);
+
+  const onRemoteNotification = (notification: PushNotification) => {
+    const data = notification.getData();
+    console.log(data);
+  };
+
   return (
     <View style={styles.sectionContainer}>
       <Text
