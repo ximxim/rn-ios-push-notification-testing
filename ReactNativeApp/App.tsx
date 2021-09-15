@@ -21,6 +21,7 @@ import {
   useColorScheme,
   View,
   Alert,
+  Platform,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -73,6 +74,11 @@ const App = () => {
 
   useEffect(() => {
     PushNotificationIOS.requestPermissions();
+
+    if (Platform.OS !== 'ios' && !__DEV__) {
+      return;
+    }
+
     PushNotificationIOS.addEventListener(
       'localNotification',
       onRemoteNotification,
