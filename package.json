@@ -1,0 +1,10 @@
+{
+  "name": "rn-ios-push-notification-testing",
+  "version": "1.0.0",
+  "description": "This is an example project to demo how we can test push notifications on ios with react native on the front end",
+  "main": "index.js",
+  "repository": "https://github.com/ximxim/rn-ios-push-notification-testing",
+  "author": "Azim Ahmed",
+  "license": "MIT",
+  "private": false
+}
