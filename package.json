@@ -9,6 +9,7 @@
   "private": false,
   "scripts": {
     "start": "node index.js",
+    "postinstall": "cd ReactNativeApp && yarn && cd ..",
     "notify:match": "curl --request GET --url 'http://localhost:3000?match=true'",
     "notify:unmatch": "curl --request GET --url 'http://localhost:3000?match=false'"
   },
