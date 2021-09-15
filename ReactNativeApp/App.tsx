@@ -23,13 +23,7 @@ import {
   Alert,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 interface IIOSLocationNotification {
   aps: {
@@ -45,31 +39,6 @@ const Section: React.FC<{
   title: string;
 }> = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
-
-  useEffect(() => {
-    PushNotificationIOS.requestPermissions();
-    PushNotificationIOS.addEventListener(
-      'localNotification',
-      onRemoteNotification,
-    );
-
-    return () => PushNotificationIOS.removeEventListener('localNotification');
-  }, []);
-
-  const onRemoteNotification = (notification: PushNotification) => {
-    const token = 'something'; // You would use some library to the push notification token like fcmToken or APNS
-    const data = notification.getData() as IIOSLocationNotification;
-
-    if (!token || !data.aps.tokens.length) {
-      return;
-    }
-
-    Alert.alert(
-      data.aps.tokens.includes(token)
-        ? 'Yes, this notification is for you'
-        : 'No, this notification is not for you',
-    );
-  };
 
   return (
     <View style={styles.sectionContainer}>
@@ -102,31 +71,55 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  useEffect(() => {
+    PushNotificationIOS.requestPermissions();
+    PushNotificationIOS.addEventListener(
+      'localNotification',
+      onRemoteNotification,
+    );
+
+    return () => PushNotificationIOS.removeEventListener('localNotification');
+  }, []);
+
+  const onRemoteNotification = (notification: PushNotification) => {
+    const token = 'something'; // You would use some library to the push notification token like fcmToken or APNS
+    const data = notification.getData() as IIOSLocationNotification;
+
+    if (!token || !data.aps.tokens.length) {
+      return;
+    }
+
+    Alert.alert(
+      data.aps.tokens.includes(token)
+        ? 'Yes, this notification is for you'
+        : 'No, this notification is not for you',
+    );
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
+          <Section title="Trigger push notification (match)">
+            <Text>
+              Run <Text style={styles.highlight}>yarn notify:match</Text> on
+              root director. This will trigger a notification that is meant for
+              this device.
+            </Text>
           </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
+          <Section title="Trigger push notification (unmatch)">
+            <Text>
+              Run <Text style={styles.highlight}>yarn notify:unmatch</Text> on
+              root director. This will trigger a notification that is NOT meant
+              for this device.
+            </Text>
           </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
         </View>
       </ScrollView>
     </SafeAreaView>
