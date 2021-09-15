@@ -20,6 +20,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Alert,
 } from 'react-native';
 
 import {
@@ -29,6 +30,16 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+interface IIOSLocationNotification {
+  aps: {
+    alert: {
+      title: string;
+      body: string;
+    };
+    tokens: string[];
+  };
+}
 
 const Section: React.FC<{
   title: string;
@@ -46,8 +57,18 @@ const Section: React.FC<{
   }, []);
 
   const onRemoteNotification = (notification: PushNotification) => {
-    const data = notification.getData();
-    console.log(data);
+    const token = 'something'; // You would use some library to the push notification token like fcmToken or APNS
+    const data = notification.getData() as IIOSLocationNotification;
+
+    if (!token || !data.aps.tokens.length) {
+      return;
+    }
+
+    Alert.alert(
+      data.aps.tokens.includes(token)
+        ? 'Yes, this notification is for you'
+        : 'No, this notification is not for you',
+    );
   };
 
   return (
