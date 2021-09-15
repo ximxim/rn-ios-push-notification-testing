@@ -6,13 +6,15 @@ const port = 3000
 app.get('/', (req, res) => {
   const match = req.query.match === 'true';
   const message = {
-    notification: {
-      title: 'Test',
-      body: 'Test',
-    },
-    tokens: match ? ['something'] : ['another'],
+    aps: {
+      alert: {
+        title: 'Test',
+        body: 'Test',
+      },
+      tokens: match ? ['something'] : ['another'],
+    }
   }
-  shell.exec(`echo '{ "aps": { "alert": ${JSON.stringify(message.notification)}, "tokens": ${JSON.stringify(message.tokens)} } }' | xcrun simctl push booted com.example.pushnotification -`);
+  shell.exec(`echo '${JSON.stringify(message)}' | xcrun simctl push booted com.example.pushnotification -`);
   res.send('')
 })
 
