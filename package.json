@@ -8,7 +8,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "notify:match": "curl --request GET --url 'http://localhost:3000?match=true'",
+    "notify:unmatch": "curl --request GET --url 'http://localhost:3000?match=false'"
   },
   "dependencies": {
     "express": "^4.17.1",
